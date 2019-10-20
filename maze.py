@@ -7,14 +7,14 @@ class Maze():
     # nicknames for actions... for beginners, only
     actions = ['N','S','E','W']
     # offsets to move North, South, East, or West
-    offset = [(0,-1),(0,1),(1,0),(-1,0)]
+    offset = [(-1,0),(1,0),(0,1),(0,-1)]
 
     def __init__(self):
         self.mark = None
         self.reset()
 
     def reset(self, random=False):
-        self.maze = np.array([[0,0,0,-1],[0,-1,0,-1],[0,0,-1,0],[-1,0,0,0]])  # the maze is hardcoded
+        self.maze = np.array([[0,0,0,-1],[0,-1,0,0],[0,0,-1,0],[-1,-1,0,0]])  # the maze is hardcoded
         self.i = 1
         self.maze[0][0] = self.i  # mark initial position with counter
         self.player = (0,0)
@@ -50,7 +50,7 @@ class Maze():
 
     def action_space(self):
         return Maze.actions
-    
+
     def action_space_n(self):
         return [0,1,2,3]
 
@@ -58,10 +58,10 @@ class Maze():
         return 4,4
 
     def __str__(self):
-        out = '\n=========='  
-        for y in range(4):
+        out = '\n=========='
+        for x in range(4):
             out += '\n|'
-            for x in range(4):
+            for y in range(4):
                 if self.mark is not None and self.mark[0]==x and self.mark[1]==y:
                     out += '? '
                 elif self.maze[x][y]>0:
@@ -74,8 +74,8 @@ class Maze():
                     out += '. '
             out += '|'
         out += '\n==========\n'
-        return out                     
- 
+        return out
+
     def print_q(q, mode='all'):
         print('=====  ================================')
         print('state         N       S       E       W\n')
@@ -108,7 +108,7 @@ class Maze():
           y.append(n)
           b.append(0)
           z[m][n] += max(max(q[m][n]),0)
-            
+
       ax1.bar3d(x, y, b, 1, 1, np.ravel(z), shade=True)
       plt.title('Positive Q-scores')
       plt.xlabel('state (row)')
