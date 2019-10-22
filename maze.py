@@ -10,35 +10,38 @@ class Maze():
     offset = [(-1,0),(1,0),(0,1),(0,-1)]
 
     def __init__(self):
+        self.maze = np.array([[0,0,0,-1],[0,-1,0,0],[0,0,-1,0],[-1,-1,0,0]])  # the maze is hardcoded
         self.mark = None
         self.reset()
 
+    # clear the blocks, leaving an empty maze
+    def remove_blocks(self):
+        self.maze = np.zeros((4,4),dtype=int)
+    
+    # reset the environment
     def reset(self, random=False):
-        self.maze = np.array([[0,0,0,-1],[0,-1,0,0],[0,0,-1,0],[-1,-1,0,0]])  # the maze is hardcoded
         self.i = 1
         self.maze[0][0] = self.i  # mark initial position with counter
         self.player = (0,0)
         return self.player
 
-    # action should be one of: 'N', 'S', 'E', 'W'
-    # returns reward, done
-    # rewards are: +1 = success, -1 = failure, 0 = no outcome
-    # done = True if a terminal state is reached, otherwise False
+    # take one step, using a specified action
     def step(self, action):
         self.i += 1
         if type(action) is str:
             action = Maze.actions.index(action)
-        self.player = tuple(np.add(self.player, Maze.offset[action]))
-        if max(self.player) > 3 or min(self.player) < 0:        # out of bounds
+        obs = tuple(np.add(self.player, Maze.offset[action]))
+        if max(obs) > 3 or min(obs) < 0 or self.maze[obs] == -1:
+            # player is out of bounds or square is blocked... don't move player
             return self.player, -1, True
         else:
-            if self.maze[self.player[0]][self.player[1]] == -1: # moved onto a blocked space
-                return self.player, -1, True
-            self.maze[self.player[0]][self.player[1]] = self.i
-            if np.array_equal(self.player, (3,3)):              # reached the exit
+            # move was successful, advance player to new position
+            self.maze[obs] = self.i
+            self.player = obs
+            if np.array_equal(self.player, (3,3)):  # reached the exit
                 return self.player, 1, True
             else:
-                return self.player, 0, False                    # no outcome (player is on an open space)
+                return self.player, 0, False        # no outcome (player is on an open space)
 
     # return a random action (equally distributed across the action space)
     def sample(self):
