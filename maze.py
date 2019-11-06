@@ -17,10 +17,11 @@ class Maze():
     # clear the blocks, leaving an empty maze
     def remove_blocks(self):
         self.maze = np.zeros((4,4),dtype=int)
-    
+
     # reset the environment
-    def reset(self, random=False):
+    def reset(self):
         self.i = 1
+        self.maze = np.array([[0,0,0,-1],[0,-1,0,0],[0,0,-1,0],[-1,-1,0,0]])  # the maze is hardcoded
         self.maze[0][0] = self.i  # mark initial position with counter
         self.player = (0,0)
         return self.player
