@@ -61,7 +61,7 @@ class Maze():
         return 4,4
 
     def __str__(self):
-        out = '\n=========='
+        out = '=========='
         for x in range(4):
             out += '\n|'
             for y in range(4):
@@ -76,7 +76,7 @@ class Maze():
                 else:
                     out += '. '
             out += '|'
-        out += '\n==========\n'
+        out += '\n=========='
         return out
 
     def print_q(q, mode='all'):
@@ -118,4 +118,3 @@ class Maze():
       plt.ylabel('state (col)')
       plt.show()
 
-print('the maze environment is all set to go')
