@@ -2,6 +2,7 @@
 import numpy as np
 from mpl_toolkits.mplot3d import axes3d
 import matplotlib.pyplot as plt
+import copy
 
 class Maze():
     # nicknames for actions... for beginners, only
@@ -10,18 +11,18 @@ class Maze():
     offset = [(-1,0),(1,0),(0,1),(0,-1)]
 
     def __init__(self):
-        self.maze = np.array([[0,0,0,-1],[0,-1,0,0],[0,0,-1,0],[-1,-1,0,0]])  # the maze is hardcoded
+        self.initial_maze = np.array([[0,0,0,-1],[0,-1,0,0],[0,0,-1,0],[-1,-1,0,0]])  # the maze is hardcoded
         self.mark = None
         self.reset()
 
     # clear the blocks, leaving an empty maze
     def remove_blocks(self):
-        self.maze = np.zeros((4,4),dtype=int)
-
+        self.initial_maze = np.zeros((4,4),dtype=int)
+    
     # reset the environment
-    def reset(self):
+    def reset(self, random=False):
+        self.maze = copy.copy(self.initial_maze)
         self.i = 1
-        self.maze = np.array([[0,0,0,-1],[0,-1,0,0],[0,0,-1,0],[-1,-1,0,0]])  # the maze is hardcoded
         self.maze[0][0] = self.i  # mark initial position with counter
         self.player = (0,0)
         return self.player
@@ -62,7 +63,7 @@ class Maze():
         return 4,4
 
     def __str__(self):
-        out = '=========='
+        out = '\n=========='
         for x in range(4):
             out += '\n|'
             for y in range(4):
@@ -77,7 +78,7 @@ class Maze():
                 else:
                     out += '. '
             out += '|'
-        out += '\n=========='
+        out += '\n==========\n'
         return out
 
     def print_q(q, mode='all'):
@@ -119,3 +120,4 @@ class Maze():
       plt.ylabel('state (col)')
       plt.show()
 
+print('the maze environment is all set to go')
